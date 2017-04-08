@@ -47,7 +47,7 @@ debug() {
 
 program_exists() {
     local ret='0'
-    command -v $1 >/dev/null 2>&1 || { local ret='1'; }
+    command --version $1 >/dev/null 2>&1 || { local ret='1'; }
 
     # fail on non-zero return value
     if [ "$ret" -ne 0 ]; then
@@ -63,6 +63,15 @@ program_must_exist() {
     # throw error on non-zero return value
     if [ "$?" -ne 0 ]; then
         error "You must have '$1' installed to continue."
+    fi
+}
+program_better_exist() {
+    program_exists $1
+
+    # throw error on non-zero return value
+    if [ "$?" -ne 0 ]; then
+        msg "It's better to have '$1' installed, will try to install $1"
+        sudo apt-get -y install $1
     fi
 }
 
@@ -178,9 +187,9 @@ setup_vundle() {
 variable_set "$HOME"
 program_must_exist "vim"
 program_must_exist "git"
-program_must_exist "indent"
-program_must_exist "ctags"
-program_must_exist "cscope"
+program_better_exist "indent"
+program_better_exist "ctags"
+program_better_exist "cscope"
 
 do_backup       "$HOME/.vim" \
                 "$HOME/.vimrc" \
