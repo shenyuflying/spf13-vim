@@ -178,6 +178,9 @@ setup_vundle() {
 variable_set "$HOME"
 program_must_exist "vim"
 program_must_exist "git"
+program_must_exist "indent"
+program_must_exist "ctags"
+program_must_exist "cscope"
 
 do_backup       "$HOME/.vim" \
                 "$HOME/.vimrc" \

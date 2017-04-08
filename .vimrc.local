@@ -1,0 +1,49 @@
+"----------------------------------------------------------
+"              yshen's custom settings
+"----------------------------------------------------------
+" keybindings:
+" <F4>  gen ctag and cscope files
+" <F5>  run make
+" <leader>id run indent on the current file
+" <leader>tt toggle tagbar on the right
+" <leader>e  toggle nerd tree on the left
+
+
+set nospell
+
+
+"-----------------------------------------------------------
+"               color scheme
+"----------------------------------------------------------
+
+colorscheme molokai
+let g:molokai_original = 1
+
+
+"-----------------------------------------------------------
+"                indent the current file 
+"----------------------------------------------------------
+" 1.save 2.run indent 3.reopen
+map <leader>id :w <CR> :!indent  --indent-level4  --blank-lines-after-declarations  --no-space-after-function-call-names  --brace-indent0 --declaration-indentation9  % <CR> :e<CR>
+
+"-----------------------------------------------------------
+"                ctags and cscope file generation
+"----------------------------------------------------------
+map <F4> :!ctags -R  --fields=+iaS --extra=+q . && cscope -Rbq  &&  awk '{print "syntax keyword tag "$1}' tags > tags.vim <CR>
+imap <F4> <ESC> :!ctags -R  --fields=+iaS --extra=+q . && cscope -Rbq  &&  awk '{print "syntax keyword tag "$1}' tags > tags.vim <CR>
+
+"-----------------------------------------------------------
+"                complile
+"-----------------------------------------------------------
+map <F5> :make <ESC>
+
+let g:indent_guides_enable_on_vim_startup = 0
+
+"-----------------------------------------------------------
+"                OmniComplete
+"-----------------------------------------------------------
+set nocp
+let OmniCpp_MayCompleteDot = 1   " autocomplete after type .
+let OmniCpp_MayCompleteArrow = 1 " autocomplete after type ->
+let OmniCpp_MayCompleteScope = 1 " autocomplete after type ::
+let OmniCpp_ShowPrototypeInAbbr = 1
