@@ -11,6 +11,7 @@
 
 set nospell
 
+let g:spf13_no_autochdir = 1
 
 "-----------------------------------------------------------
 "               color scheme
@@ -29,8 +30,11 @@ map <leader>id :w <CR> :!indent  --indent-level4  --blank-lines-after-declaratio
 "-----------------------------------------------------------
 "                ctags and cscope file generation
 "----------------------------------------------------------
-map <F4> :!ctags -R  --fields=+iaS --extra=+q . && cscope -Rbq  &&  awk '{print "syntax keyword tag "$1}' tags > tags.vim <CR>
-imap <F4> <ESC> :!ctags -R  --fields=+iaS --extra=+q . && cscope -Rbq  &&  awk '{print "syntax keyword tag "$1}' tags > tags.vim <CR>
+map <F4> :!ctags -R  --fields=+iaS --extra=+q . && cscope -Rbq  &&  awk '{print "syntax keyword tag "$1}' tags > tags.vim <CR> :source ./tags.vim <CR>
+imap <F4> <ESC> :!ctags -R  --fields=+iaS --extra=+q . && cscope -Rbq  &&  awk '{print "syntax keyword tag "$1}' tags > tags.vim <CR> :source ./tags.vim <CR>
+" auto load tags.vim if we have it
+autocmd BufEnter * if filereadable(expand("tags.vim")) | source tags.vim | endif
+
 
 "-----------------------------------------------------------
 "                complile
@@ -47,3 +51,5 @@ let OmniCpp_MayCompleteDot = 1   " autocomplete after type .
 let OmniCpp_MayCompleteArrow = 1 " autocomplete after type ->
 let OmniCpp_MayCompleteScope = 1 " autocomplete after type ::
 let OmniCpp_ShowPrototypeInAbbr = 1
+
+
