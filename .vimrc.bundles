@@ -160,6 +160,7 @@
             Bundle 'tpope/vim-commentary'
             Bundle 'godlygeek/tabular'
             Bundle 'luochen1990/rainbow'
+            Bundle 'c-standard-functions-highlight'
             if executable('ctags')
                 Bundle 'majutsushi/tagbar'
             endif
