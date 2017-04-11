@@ -47,7 +47,7 @@ debug() {
 
 program_exists() {
     local ret='0'
-    command --version $1 >/dev/null 2>&1 || { local ret='1'; }
+    command -v $1 >/dev/null 2>&1 || { local ret='1'; }
 
     # fail on non-zero return value
     if [ "$ret" -ne 0 ]; then
@@ -133,6 +133,7 @@ create_symlinks() {
     lnif "$source_path/.vimrc"         "$target_path/.vimrc"
     lnif "$source_path/.vimrc.bundles" "$target_path/.vimrc.bundles"
     lnif "$source_path/.vimrc.before"  "$target_path/.vimrc.before"
+    lnif "$source_path/.vimrc.local"  "$target_path/.vimrc.local"
     lnif "$source_path/.vim"           "$target_path/.vim"
 
     if program_exists "nvim"; then

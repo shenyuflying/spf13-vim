@@ -2,17 +2,20 @@
 "              yshen's custom settings
 "----------------------------------------------------------
 " keybindings:
-" <F4>  gen ctag and cscope files
-" <F5>  run make
-" <leader>id run indent on the current file
+" <F4>  gen ctag and cscope files for the current project
+" <F5>  run make, you'd better have a Makefile
+" <F12> toggle paste mode
+" <leader>id run indent on the current file and save it
 " <leader>tt toggle tagbar on the right
 " <leader>e  toggle nerd tree on the left
+"
 
 
 set nospell
-set noautochdir
-
-let g:spf13_no_autochdir = 1
+" this will modify the existing code a lot
+" make the path hard to review
+" so, better turn t off
+let g:spf13_keep_trailing_whitespace = 1
 
 "-----------------------------------------------------------
 "               color scheme
@@ -21,6 +24,11 @@ let g:spf13_no_autochdir = 1
 colorscheme molokai
 let g:molokai_original = 1
 
+"-----------------------------------------------------------
+"               jump between buffers
+"----------------------------------------------------------
+map <space>j :bnext <CR>
+map <space>k :bprevious <CR>
 
 "-----------------------------------------------------------
 "                indent the current file 
@@ -31,10 +39,11 @@ map <leader>id :w <CR> :!indent  --indent-level4  --blank-lines-after-declaratio
 "-----------------------------------------------------------
 "                ctags and cscope file generation
 "----------------------------------------------------------
-map <F4> :!ctags -R  --fields=+iaS --extra=+q . && cscope -Rbq  &&  awk '{print "syntax keyword tag "$1}' tags > tags.vim <CR> :source ./tags.vim <CR>
-imap <F4> <ESC> :!ctags -R  --fields=+iaS --extra=+q . && cscope -Rbq  &&  awk '{print "syntax keyword tag "$1}' tags > tags.vim <CR> :source ./tags.vim <CR>
-" auto load tags.vim if we have it
-autocmd BufEnter * if filereadable(expand("tags.vim")) | source tags.vim | endif
+" XXX add more filetypes you wish!
+" NOTICE: use absolute path for ctags and cscope by pwd
+map <F4> :!ctags -R  --fields=+iaS --extra=+q `pwd` && find `pwd` -name "*.c" -o -name "*.h" -o -name "*.y" -o -name -"*.l"> cscope.files && cscope -bq -i cscope.files &&  awk '{print "syntax keyword tag "$1}' tags > ~/tags.vim <CR> :set tags=./tags <CR> :cs add cscope.out<CR>:source ~/tags.vim <CR>
+" auto load tags.vim if we have it, if too big will slow down vim significantly
+" autocmd BufEnter * if filereadable(expand("~/tags.vim")) | source ~/tags.vim | endif
 
 
 "-----------------------------------------------------------
@@ -48,9 +57,9 @@ let g:indent_guides_enable_on_vim_startup = 0
 "                OmniComplete
 "-----------------------------------------------------------
 set nocp
-let OmniCpp_MayCompleteDot = 1   " autocomplete after type .
-let OmniCpp_MayCompleteArrow = 1 " autocomplete after type ->
-let OmniCpp_MayCompleteScope = 1 " autocomplete after type ::
+"let OmniCpp_MayCompleteDot = 1   " autocomplete after type .
+"let OmniCpp_MayCompleteArrow = 1 " autocomplete after type ->
+"let OmniCpp_MayCompleteScope = 1 " autocomplete after type ::
 let OmniCpp_ShowPrototypeInAbbr = 1
 
 
@@ -69,6 +78,16 @@ if has("cscope")
   elseif $CSCOPE_DB != ""
     cs add $CSCOPE_DB
   endif
-  
   set csverb
 endif
+
+
+nmap <space>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <space>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <space>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <space>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <space>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <space>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <space>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <space>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
