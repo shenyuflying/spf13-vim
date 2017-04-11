@@ -4,15 +4,14 @@
 " keybindings:
 " <F4>  gen ctag and cscope files
 " <F5>  run make
+" <F12> toggle paste mode
 " <leader>id run indent on the current file
 " <leader>tt toggle tagbar on the right
 " <leader>e  toggle nerd tree on the left
+"
 
 
 set nospell
-set noautochdir
-
-let g:spf13_no_autochdir = 1
 
 "-----------------------------------------------------------
 "               color scheme
@@ -31,10 +30,10 @@ map <leader>id :w <CR> :!indent  --indent-level4  --blank-lines-after-declaratio
 "-----------------------------------------------------------
 "                ctags and cscope file generation
 "----------------------------------------------------------
-map <F4> :!ctags -R  --fields=+iaS --extra=+q . && cscope -Rbq  &&  awk '{print "syntax keyword tag "$1}' tags > tags.vim <CR> :source ./tags.vim <CR>
-imap <F4> <ESC> :!ctags -R  --fields=+iaS --extra=+q . && cscope -Rbq  &&  awk '{print "syntax keyword tag "$1}' tags > tags.vim <CR> :source ./tags.vim <CR>
-" auto load tags.vim if we have it
-autocmd BufEnter * if filereadable(expand("tags.vim")) | source tags.vim | endif
+" XXX add more filetypes you wish!
+map <F4> :!ctags -R  --fields=+iaS --extra=+q . && find `pwd` -name "*.c" -o -name "*.h" -o -name "*.y" -o -name -"*.l"> cscope.files && cscope -bq -i cscope.files &&  awk '{print "syntax keyword tag "$1}' tags > ~/tags.vim <CR> :set tags=./tags <CR> :cs add cscope.out<CR>:source ~/tags.vim <CR>
+" auto load tags.vim if we have it, if too big will slow down vim significantly
+" autocmd BufEnter * if filereadable(expand("~/tags.vim")) | source ~/tags.vim | endif
 
 
 "-----------------------------------------------------------
@@ -69,6 +68,16 @@ if has("cscope")
   elseif $CSCOPE_DB != ""
     cs add $CSCOPE_DB
   endif
-  
   set csverb
 endif
+
+
+nmap <space>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <space>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <space>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <space>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <space>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <space>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <space>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <space>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
