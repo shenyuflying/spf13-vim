@@ -12,6 +12,7 @@
 
 
 set nospell
+set mouse=v
 " this will modify the existing code a lot
 " make the path hard to review
 " so, better turn t off
